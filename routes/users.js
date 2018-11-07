@@ -13,8 +13,16 @@ router.get('/', function (req, res, next) {
 });
 
 // Create new user. Takes username, email, password
-router.put('/createUser', function(req, res, next) {
+router.put('/signUp', function(req, res, next) {
     // need to check passed parameters!
+    User.findOne({ username: req.body.username })
+        .exec(function (err, user) {
+            if(err) return next(err);
+
+            if(user != null)
+                return res.status(403).send();
+        });
+
     var user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -26,6 +34,20 @@ router.put('/createUser', function(req, res, next) {
 
         return res.status(200).send();
     });
+});
+
+// Very basic sign in. Takes username, password.
+router.post('/signIn', function(req, res, next) {
+    User.findOne({ username: req.body.username })
+        .exec(function (err, user) {
+            if(err) return next(err);
+            console.log(user.password);
+            console.log(req.body);
+            if(!user || user.password != req.body.password)
+                res.status(403).send();
+            else
+                res.status(200).send();
+        });
 });
 
 // Checks if username already taken
