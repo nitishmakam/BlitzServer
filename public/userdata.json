@@ -1,0 +1,23 @@
+[
+    {
+        "_id": "5be2f7c48d5844704a71c88a",
+        "username": "abc",
+        "email": "abc@abc.com",
+        "password": "123",
+        "__v": 0
+    },
+    {
+        "_id": "5be308612d9c367b7c94a75f",
+        "username": "bob",
+        "email": "bob@abc.com",
+        "password": "123",
+        "__v": 0
+    },
+    {
+        "_id": "5be308672d9c367b7c94a760",
+        "username": "dave",
+        "email": "dave@abc.com",
+        "password": "123",
+        "__v": 0
+    }
+]

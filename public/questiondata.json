@@ -1,0 +1,59 @@
+[
+    {
+        "_id": "5be309f37c879a7d73aca98e",
+        "user": {
+            "_id": "5be2f7c48d5844704a71c88a",
+            "username": "abc"
+        },
+        "text": "Hello?",
+        "__v": 1,
+        "answers": [
+            {
+                "_id": "5be30a977c879a7d73aca993",
+                "text": "Hi",
+                "user": {
+                    "_id": "5be308612d9c367b7c94a75f",
+                    "username": "bob"
+                }
+            }
+        ]
+    },
+    {
+        "_id": "5be30a167c879a7d73aca98f",
+        "user": {
+            "_id": "5be308672d9c367b7c94a760",
+            "username": "dave"
+        },
+        "text": "What's your name?",
+        "__v": 1,
+        "answers": [
+            {
+                "_id": "5be30a607c879a7d73aca991",
+                "text": "I am abc",
+                "user": {
+                    "_id": "5be2f7c48d5844704a71c88a",
+                    "username": "abc"
+                }
+            }
+        ]
+    },
+    {
+        "_id": "5be30a247c879a7d73aca990",
+        "user": {
+            "_id": "5be308612d9c367b7c94a75f",
+            "username": "bob"
+        },
+        "text": "How are you doing?",
+        "__v": 1,
+        "answers": [
+            {
+                "_id": "5be30a7e7c879a7d73aca992",
+                "text": "Fine",
+                "user": {
+                    "_id": "5be308672d9c367b7c94a760",
+                    "username": "dave"
+                }
+            }
+        ]
+    }
+]

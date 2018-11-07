@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 
 // Get question by id
 router.get('/:id', function(req, res, next) {
-    Question.find({_id: req.params.id})
+    Question.findOne({ _id: req.params.id })
         .populate({ path: 'user', select: 'username' })
         .populate({ path: 'answers.user', select: 'username' })
         .exec(function (err, question) {
@@ -30,53 +30,65 @@ router.get('/:id', function(req, res, next) {
         });
 });
 
-// Create new question. Takes user(ref) and text
-router.put('/createquestion', function(req, res, next) {
-    var question = new Question({
-        user: req.body.user,
-        text: req.body.text,
-    });
+// Create new question. Takes username and text
+router.put('/createQuestion', function(req, res, next) {
+    // need to validate sent params
+    User.findOne({ username: req.body.username })
+        .exec(function (err, user) {
+            if(err) return next(err);
 
-    // validation needed
-    question.save(function (err) {
-        if(err) return next(err);
+            if(user == null)
+                return res.status(403).send();
 
-        return res.json({
-            result: "success",
+            var question = new Question({
+                user: user._id,
+                text: req.body.text,
+            });
+
+            question.save(function (err) {
+                if(err) return next(err);
+
+                return res.status(200).send();
+            });
         });
-    });
 });
 
-// Create new answer. Takes qid(ref), user(ref) and text
-router.put('/createanswer', function(req, res, next) {
+// Create new answer. Takes qid(ref), username and text
+router.put('/createAnswer', function(req, res, next) {
     Question.findOne({ _id: req.body.qid })
         .exec(function (err, question) {
             if(err) return next(err);
 
             if(!question) {
-                return res.json({
+                return res.status(403).json({
                     result: "failure",
                     message: "Question does not exist",
                 });
             }
             
-            var answer = {
-                text: req.body.text,
-                user: req.body.user,
-            };
+            User.findOne({ username: req.body.username })
+                .exec(function (err, user) {
+                    if(err) return next(err);
 
-            if(question.answers === undefined)
-                question.answers = [answer];
-            else
-                question.answers.push(answer);
+                    if(user == null)
+                        return res.status(403).send();
 
-            question.save(function (err) {
-                if(err) return next(err);
+                    var answer = {
+                        text: req.body.text,
+                        user: user._id,
+                    };
 
-                return res.json({
-                    result: "success",
+                    if(question.answers === undefined)
+                        question.answers = [answer];
+                    else
+                        question.answers.push(answer);
+
+                    question.save(function (err) {
+                        if(err) return next(err);
+
+                        return res.status(200).send();
+                    });
                 });
-            });
         });
 });
 
