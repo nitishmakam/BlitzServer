@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
 });
 
 // Create new user. Takes username, email, password
-router.put('/signUp', function(req, res, next) {
+router.post('/signUp', function(req, res, next) {
     // need to check passed parameters!
     User.findOne({ username: req.body.username })
         .exec(function (err, user) {
@@ -62,7 +62,7 @@ router.get('/usernameValid/:username', function (req, res, next) {
           res.status(200).send();
         }
         else {
-          res.status(403).send();
+          res.status(409).send();
         }
       }
     });

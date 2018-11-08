@@ -28,6 +28,7 @@ var questionSchema = new Schema({
         type: [answerSchema],
         default: undefined,
     },
+    
 });
 
 module.exports = mongoose.model('Question', questionSchema);
