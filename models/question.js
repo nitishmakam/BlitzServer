@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 
 var Schema = mongoose.Schema;
 
@@ -12,6 +13,10 @@ var answerSchema = new Schema({
         ref: 'User',
         required: true,
     },
+    created: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 var questionSchema = new Schema({
@@ -23,6 +28,10 @@ var questionSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User',
         required: true,
+    },
+    created: {
+        type: Date,
+        default: Date.now,
     },
     answers: {
         type: [answerSchema],

@@ -8,9 +8,9 @@ var async = require('async');
 
 // Get all questions
 router.get('/', function(req, res, next) {
-    Question.find({})
-        .populate({ path: 'user', select: 'username' })
-        .populate({ path: 'answers.user', select: 'username' })
+    Question.find({}, { __v: 0, })
+        .populate({ path: 'user', select: 'username -_id' })
+        .populate({ path: 'answers.user', select: 'username -_id' })
         .exec(function (err, questions) {
             if(err) return next(err);
 
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 
 // Get question by id
 router.get('/:id', function(req, res, next) {
-    Question.findOne({ _id: req.params.id })
+    Question.findOne({ _id: req.params.id }, { __v: 0, })
         .populate({ path: 'user', select: 'username' })
         .populate({ path: 'answers.user', select: 'username' })
         .exec(function (err, question) {

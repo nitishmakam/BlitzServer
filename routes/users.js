@@ -4,7 +4,7 @@ var User = require('../models/user');
 
 // Get all users
 router.get('/', function (req, res, next) {
-    User.find({})
+    User.find({}, { __v: 0, _id: 0, })
         .exec(function (err, users) {
             if(err) return next(err);
 

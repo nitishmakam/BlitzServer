@@ -1,58 +1,43 @@
 [
     {
-        "_id": "5be309f37c879a7d73aca98e",
-        "user": {
-            "_id": "5be2f7c48d5844704a71c88a",
-            "username": "abc"
-        },
-        "text": "Hello?",
-        "__v": 1,
-        "answers": [
-            {
-                "_id": "5be30a977c879a7d73aca993",
-                "text": "Hi",
-                "user": {
-                    "_id": "5be308612d9c367b7c94a75f",
-                    "username": "bob"
-                }
-            }
-        ]
-    },
-    {
-        "_id": "5be30a167c879a7d73aca98f",
-        "user": {
-            "_id": "5be308672d9c367b7c94a760",
-            "username": "dave"
-        },
-        "text": "What's your name?",
-        "__v": 1,
-        "answers": [
-            {
-                "_id": "5be30a607c879a7d73aca991",
-                "text": "I am abc",
-                "user": {
-                    "_id": "5be2f7c48d5844704a71c88a",
-                    "username": "abc"
-                }
-            }
-        ]
-    },
-    {
-        "_id": "5be30a247c879a7d73aca990",
-        "user": {
-            "_id": "5be308612d9c367b7c94a75f",
-            "username": "bob"
-        },
+        "_id": "5be3e5e403a44a27d4ce3f2d",
+        "user": "5be308612d9c367b7c94a75f",
         "text": "How are you doing?",
-        "__v": 1,
+        "created": "2018-11-08T07:29:40.132Z",
         "answers": [
             {
-                "_id": "5be30a7e7c879a7d73aca992",
-                "text": "Fine",
-                "user": {
-                    "_id": "5be308672d9c367b7c94a760",
-                    "username": "dave"
-                }
+                "created": "2018-11-08T07:32:41.622Z",
+                "_id": "5be3e69903a44a27d4ce3f30",
+                "text": "I'm good",
+                "user": "5be308672d9c367b7c94a760"
+            }
+        ]
+    },
+    {
+        "_id": "5be3e5ef03a44a27d4ce3f2e",
+        "user": "5be308672d9c367b7c94a760",
+        "text": "What's the time?",
+        "created": "2018-11-08T07:29:51.578Z",
+        "answers": [
+            {
+                "created": "2018-11-08T07:33:17.109Z",
+                "_id": "5be3e6bd03a44a27d4ce3f31",
+                "text": "5pm",
+                "user": "5be2f7c48d5844704a71c88a"
+            }
+        ]
+    },
+    {
+        "_id": "5be3e5fb03a44a27d4ce3f2f",
+        "user": "5be2f7c48d5844704a71c88a",
+        "text": "Hello?",
+        "created": "2018-11-08T07:30:03.509Z",
+        "answers": [
+            {
+                "created": "2018-11-08T07:33:33.073Z",
+                "_id": "5be3e6cd03a44a27d4ce3f32",
+                "text": "Hi",
+                "user": "5be308612d9c367b7c94a75f"
             }
         ]
     }
