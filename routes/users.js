@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
+
 var User = require('../models/user');
 
 // Get all users
@@ -41,12 +43,18 @@ router.post('/signIn', function(req, res, next) {
     User.findOne({ username: req.body.username })
         .exec(function (err, user) {
             if(err) return next(err);
-            console.log(user.password);
-            console.log(req.body);
+
             if(!user || user.password != req.body.password)
-                res.status(403).send();
-            else
-                res.status(200).send();
+                return res.status(403).send();
+            else {
+                var token = jwt.sign({
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email,
+                }, 'randomSecret', { expiresIn: '2h' });
+
+                return res.status(200).json(token);
+            }
         });
 });
 

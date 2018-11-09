@@ -21,8 +21,8 @@ router.get('/', function(req, res, next) {
 // Get question by id
 router.get('/:id', function(req, res, next) {
     Question.findOne({ _id: req.params.id }, { __v: 0, })
-        .populate({ path: 'user', select: 'username' })
-        .populate({ path: 'answers.user', select: 'username' })
+        .populate({ path: 'user', select: 'username -_id' })
+        .populate({ path: 'answers.user', select: 'username -_id' })
         .exec(function (err, question) {
             if(err) return next(err);
 
@@ -48,8 +48,8 @@ router.post('/createQuestion', function(req, res, next) {
             question.save(function (err) {
                 if(err) return next(err);
 
+                return res.status(200).json(question);
             });
-            return res.status(200).send(question);
         });
 });
 
@@ -85,9 +85,16 @@ router.post('/createAnswer', function(req, res, next) {
 
                     question.save(function (err) {
                         if(err) return next(err);
-
-                        return res.status(200).send();
                     });
+
+                    Question.findOne({ _id: question._id }, { __v: 0, })
+                        .populate({ path: 'user', select: 'username -_id' })
+                        .populate({ path: 'answers.user', select: 'username -_id' })
+                        .exec(function (err, question) {
+                            if(err) return next(err);
+
+                            return res.status(200).json(question);
+                        });
                 });
         });
 });
