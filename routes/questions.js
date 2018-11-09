@@ -1,10 +1,33 @@
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
 
 var Question = require('../models/question');
 var User = require('../models/user');
 
 var async = require('async');
+
+router.use(function(req, res, next) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    if(token) {
+        jwt.verify(token, 'randomSecret', function(err, decoded) {
+            if(err) {
+                console.log('Failed to authenticate token');
+                next();
+            }
+            else {
+                console.log('Valid token!');
+                res.locals.decoded = decoded;
+                next();
+            }
+        });
+    }
+    else {
+        console.log('No token provided');
+        next();
+    }
+});
 
 // Get all questions
 router.get('/', function(req, res, next) {
