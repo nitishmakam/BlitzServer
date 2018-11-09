@@ -31,7 +31,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 // Create new question. Takes username and text
-router.put('/createQuestion', function(req, res, next) {
+router.post('/createQuestion', function(req, res, next) {
     // need to validate sent params
     User.findOne({ username: req.body.username })
         .exec(function (err, user) {
@@ -48,13 +48,13 @@ router.put('/createQuestion', function(req, res, next) {
             question.save(function (err) {
                 if(err) return next(err);
 
-                return res.status(200).send();
             });
+            return res.status(200).send(question);
         });
 });
 
 // Create new answer. Takes qid(ref), username and text
-router.put('/createAnswer', function(req, res, next) {
+router.post('/createAnswer', function(req, res, next) {
     Question.findOne({ _id: req.body.qid })
         .exec(function (err, question) {
             if(err) return next(err);
