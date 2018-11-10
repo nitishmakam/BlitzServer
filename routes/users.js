@@ -52,7 +52,7 @@ router.post('/signIn', function (req, res, next) {
                     username: user.username,
                     email: user.email,
                 }, 'randomSecret', { expiresIn: '2h' });
-                return res.status(200).json(token);
+                return res.status(200).send(token);
             }
         });
 });
