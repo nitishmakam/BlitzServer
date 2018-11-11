@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken');
 var multer = require('multer');
 var User = require('../models/user');
 var fs = require('fs');
-var path=require('path');
+var path = require('path');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -71,31 +71,36 @@ router.post('/signIn', function (req, res, next) {
 });
 
 router.get('/getImage/:username', function (req, res, next) {
-    User.find({ username: req.params.username }).exec(function (err, user) {
+    User.findOne({ username: req.params.username }).exec(function (err, user) {
         if (err)
             return next(err);
-        var img = fs.readFileSync('./assets/images/' + user.imgPath);
-        res.writeHead(200, { 'Content-type': 'image/' + path.extname(user.imgPath).slice(1) });
-        res.end(img, 'binary');
+        if (user.imgPath != undefined) {
+            var img = fs.readFileSync(__dirname + '/../assets/images/' + user.imgPath);
+            res.writeHead(200, { 'Content-type': 'image/' + path.extname(user.imgPath).slice(1) });
+            res.end(img, 'binary');
+        }
+        else {
+            var img = fs.readFileSync(__dirname + '/../assets/images/anon.png');
+            res.writeHead(200, { 'Content-type': 'image/png' });
+            res.end(img, 'binary');
+        }
     })
 })
 router.post('/uploadImage/:username', upload.single('file'), function (req, res, next) {
     const filename = req.file.filename;
     const path2 = req.file.path;
-
-    User.findOneAndUpdate({ username: req.params.username }).exec(function (err, user) {
-        if (err) {
-            return next(err);
-        }
-        if (user == null) {
-            res.status(403).send();
-        }
-        if (req.file != null) {
-            user.imgPath = req.params.username + path.extname(filename);
-        }
-        user.save();
-    })
-    res.status(200).send();
+    imgPath = req.params.username + path.extname(filename);
+    User.findOneAndUpdate({ username: req.params.username }, { imgPath: imgPath })
+        .exec(function (err, user) {
+            if (err) {
+                return next(err);
+            }
+            if (user == null) {
+                res.status(403).send();
+            }
+            console.log(user);
+            res.status(200).send();
+        });
 });
 // Checks if username already taken
 router.get('/usernameValid/:username', function (req, res, next) {
