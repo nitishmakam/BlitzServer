@@ -36,7 +36,7 @@ Out: Status 403 if username exists, 200 otherwise
 ##### /signIn (POST)
 Desc: Return authentication token  
 In: username(String), password(String)  
-Out: token(String)
+Out: token(String), email(String)
 
 ##### /usernameValid/:username (GET)
 Desc: Check if username exists  
