@@ -15,6 +15,9 @@ var userSchema = new Schema({
         type: String,
         required: true
     },
+    imgPath: {
+        type: String
+    },
     dob: Date,
 });
 
