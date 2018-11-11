@@ -22,7 +22,7 @@ router.post('/signUp', function (req, res, next) {
             if (err) return next(err);
 
             if (user != null)
-                return res.status(403).send();
+                return res.status(409).send();
         });
 
     var user = new User({
@@ -38,7 +38,7 @@ router.post('/signUp', function (req, res, next) {
     });
 });
 
-// Very basic sign in. Takes username, password.
+// Very basic sign in. Takes username, password. Sends token and user's email id
 router.post('/signIn', function (req, res, next) {
     User.findOne({ username: req.body.username })
         .exec(function (err, user) {
@@ -52,7 +52,7 @@ router.post('/signIn', function (req, res, next) {
                     username: user.username,
                     email: user.email,
                 }, 'randomSecret', { expiresIn: '2h' });
-                return res.status(200).send(token);
+                return res.status(200).json({ token, email: user.email });
             }
         });
 });
