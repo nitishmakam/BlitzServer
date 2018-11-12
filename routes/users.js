@@ -70,7 +70,7 @@ router.post('/signIn', function (req, res, next) {
         });
 });
 
-router.get('/getImage/:username', function (req, res, next) {
+router.get('/img/:username', function (req, res, next) {
     User.findOne({ username: req.params.username }).exec(function (err, user) {
         if (err)
             return next(err);
@@ -86,7 +86,7 @@ router.get('/getImage/:username', function (req, res, next) {
         }
     })
 })
-router.post('/uploadImage/:username', upload.single('file'), function (req, res, next) {
+router.post('/img/:username', upload.single('file'), function (req, res, next) {
     const filename = req.file.filename;
     const path2 = req.file.path;
     imgPath = req.params.username + path.extname(filename);
