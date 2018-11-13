@@ -75,7 +75,14 @@ router.get('/img/:username', function (req, res, next) {
         if (err)
             return next(err);
         if (user.imgPath != undefined) {
-            var img = fs.readFileSync(__dirname + '/../assets/images/' + user.imgPath);
+            try {
+                var img = fs.readFileSync(__dirname + '/../assets/images/' + user.imgPath);
+            }
+            catch (err) {
+                if (err.code === 'ENOENT') {
+                    res.status(404).send();
+                }
+            }
             res.writeHead(200, { 'Content-type': 'image/' + path.extname(user.imgPath).slice(1) });
             res.end(img, 'binary');
         }
@@ -98,7 +105,6 @@ router.post('/img/:username', upload.single('file'), function (req, res, next) {
             if (user == null) {
                 res.status(403).send();
             }
-            console.log(user);
             res.status(200).send();
         });
 });
