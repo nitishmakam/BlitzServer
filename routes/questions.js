@@ -12,7 +12,6 @@ router.use(auth);
 
 // Get all questions
 router.get('/', function (req, res, next) {
-    console.log(res.locals);
     Question.find({}, { __v: 0, })
         .populate({ path: 'user', select: 'username -_id' })
         .populate({ path: 'answers.user', select: 'username -_id' })
@@ -137,7 +136,6 @@ router.get('/upvoteQuestion/:qid', function (req, res, next) {
         return res.status(403).send();
 
     Question.findOne({ _id: req.params.qid })
-        .select('upvotedBy')
         .exec(function (err, question) {
             if(err) return next(err);
 
@@ -146,6 +144,42 @@ router.get('/upvoteQuestion/:qid', function (req, res, next) {
             else if(question.upvotedBy.indexOf(res.locals.decoded._id) == -1)
                 question.upvotedBy.push(res.locals.decoded._id);
             else
+                return res.status(409).send();
+
+            question.save(function (err) {
+                if(err) next(err);
+
+                return res.status(200).send();
+            });
+        });
+});
+
+router.get('/upvoteAnswer/:qid/:aid', function (req, res, next) {
+    if(!res.locals || !res.locals.decoded)
+        return res.status(403).send();
+
+    Question.findOne({ _id: req.params.qid })
+        .exec(function (err, question) {
+            if(err) return next(err);
+
+            console.log(question);
+
+            var match = false;
+            for(var i = 0; i < question.answers.length; ++i) {
+                if(question.answers[i]._id == req.params.aid) {
+                    match = true;
+
+                    if(!question.answers[i].upvotedBy)
+                        question.answers[i].upvotedBy = [res.locals.decoded._id];
+                    else if(question.answers[i].upvotedBy.indexOf(res.locals.decoded._id) == -1)
+                        question.answers[i].upvotedBy.push(res.locals.decoded._id);
+                    else
+                        return res.status(409).send();
+                }
+            }
+            
+            console.log("outside");
+            if(match == false)
                 return res.status(409).send();
 
             question.save(function (err) {

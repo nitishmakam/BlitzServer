@@ -20,7 +20,6 @@ var answerSchema = new Schema({
     upvotedBy: {
         type: [Schema.ObjectId],
         default: undefined,
-        select: false,
     },
 });
 
@@ -28,8 +27,9 @@ answerSchema.virtual('upvotes').get(function () {
     return this.upvotedBy ? this.upvotedBy.length : 0;
 });
 
-answerSchema.set('toObject', { virtuals: true, });
-answerSchema.set('toJSON', { virtuals: true, });
+answerSchema.set('toJSON', { getters: true, transform: function (doc, ret, options) {
+    delete ret.upvotedBy;
+}});
 
 var questionSchema = new Schema({
     text: {
@@ -52,16 +52,15 @@ var questionSchema = new Schema({
     upvotedBy: {
         type: [Schema.ObjectId],
         default: undefined,
-        select: false,
     },
 });
 
 questionSchema.virtual('upvotes').get(function () {
-    console.log(this.upvotedBy);
-    return (this.upvotedBy != undefined ? this.upvotedBy.length : 0);
+    return this.upvotedBy ? this.upvotedBy.length : 0;
 });
     
-questionSchema.set('toObject', { virtuals: true, });
-questionSchema.set('toJSON', { virtuals: true, });
+questionSchema.set('toJSON', { getters: true, transform: function (doc, ret, options) {
+    delete ret.upvotedBy;
+}});
 
 module.exports = mongoose.model('Question', questionSchema);
