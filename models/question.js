@@ -17,7 +17,19 @@ var answerSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    upvotedBy: {
+        type: [Schema.ObjectId],
+        default: undefined,
+        select: false,
+    },
 });
+
+answerSchema.virtual('upvotes').get(function () {
+    return this.upvotedBy ? this.upvotedBy.length : 0;
+});
+
+answerSchema.set('toObject', { virtuals: true, });
+answerSchema.set('toJSON', { virtuals: true, });
 
 var questionSchema = new Schema({
     text: {
@@ -37,7 +49,18 @@ var questionSchema = new Schema({
         type: [answerSchema],
         default: undefined,
     },
-    
+    upvotedBy: {
+        type: [Schema.ObjectId],
+        default: undefined,
+        select: false,
+    },
 });
+
+questionSchema.virtual('upvotes').get(function () {
+    return this.upvotedBy ? this.upvotedBy.length : 0;
+});
+    
+questionSchema.set('toObject', { virtuals: true, });
+questionSchema.set('toJSON', { virtuals: true, });
 
 module.exports = mongoose.model('Question', questionSchema);

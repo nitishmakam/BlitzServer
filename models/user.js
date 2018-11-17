@@ -13,12 +13,12 @@ var userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     imgPath: {
-        type: String
+        type: String,
+        default: undefined,
     },
-    dob: Date,
 });
 
 module.exports = mongoose.model('User', userSchema);

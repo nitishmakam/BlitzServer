@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
         jwt.verify(token, 'randomSecret', function(err, decoded) {
             if(err) {
                 console.log('Failed to authenticate token');
-                next();
+                return res.status(403).send();
             }
             else {
                 console.log('Valid token!');
@@ -18,6 +18,6 @@ module.exports = function(req, res, next) {
     }
     else {
         console.log('No token provided');
-        next();
+        return res.status(403).send();
     }
 };
