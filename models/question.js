@@ -57,7 +57,8 @@ var questionSchema = new Schema({
 });
 
 questionSchema.virtual('upvotes').get(function () {
-    return this.upvotedBy ? this.upvotedBy.length : 0;
+    console.log(this.upvotedBy);
+    return (this.upvotedBy != undefined ? this.upvotedBy.length : 0);
 });
     
 questionSchema.set('toObject', { virtuals: true, });
