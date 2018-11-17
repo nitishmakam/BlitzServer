@@ -70,21 +70,21 @@ In: qid, text
 Out: Status 403 if question or user doesn't exist, 200 otherwise
 
 ##### /questionsBy/:username (GET)
-Desc: Get all questions asked by user
-In: username
-Out: Array of questions
+Desc: Get all questions asked by user  
+In: username  
+Out: Array of questions  
 
 ##### /answersBy/:username (GET)
-Desc: Get all answers asked by user
-In: username
-Out: Array of questions
+Desc: Get all answers asked by user  
+In: username  
+Out: Array of questions  
 
 ##### /upvoteQuestion/:qid (GET)
-Desc: Upvote a question
-In: qid
-Out: Status 409 if already upvoted, 200 otherwise
+Desc: Upvote a question  
+In: qid  
+Out: Status 409 if already upvoted, 200 otherwise  
 
 ##### /upvoteAnswer/:qid/:aid (GET)
-Desc: Upvote an answer
-In: qid, aid
-Out: Status 409 if already upvoted or aid not in question, 200 otherwise
+Desc: Upvote an answer  
+In: qid, aid  
+Out: Status 409 if already upvoted or aid not in question, 200 otherwise  

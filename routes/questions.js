@@ -162,8 +162,6 @@ router.get('/upvoteAnswer/:qid/:aid', function (req, res, next) {
         .exec(function (err, question) {
             if(err) return next(err);
 
-            console.log(question);
-
             var match = false;
             for(var i = 0; i < question.answers.length; ++i) {
                 if(question.answers[i]._id == req.params.aid) {
@@ -178,7 +176,6 @@ router.get('/upvoteAnswer/:qid/:aid', function (req, res, next) {
                 }
             }
             
-            console.log("outside");
             if(match == false)
                 return res.status(409).send();
 
