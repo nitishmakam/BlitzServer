@@ -77,14 +77,15 @@ router.get('/img/:username', function (req, res, next) {
         if (user.imgPath != undefined) {
             try {
                 var img = fs.readFileSync(__dirname + '/../assets/images/' + user.imgPath);
+                res.writeHead(200, { 'Content-type': 'image/' + path.extname(user.imgPath).slice(1) });
+                res.end(img, 'binary');
             }
             catch (err) {
                 if (err.code === 'ENOENT') {
                     res.status(404).send();
+                    
                 }
             }
-            res.writeHead(200, { 'Content-type': 'image/' + path.extname(user.imgPath).slice(1) });
-            res.end(img, 'binary');
         }
         else {
             var img = fs.readFileSync(__dirname + '/../assets/images/anon.png');
