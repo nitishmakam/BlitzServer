@@ -94,7 +94,7 @@ router.get('/questionsBy/:username', function (req, res, next) {
     if (!res.locals || !res.locals.decoded)
         return res.status(403).send();
 
-    var uname = req.query.username || res.locals.decoded.username;
+    var uname = req.params.username || res.locals.decoded.username;
 
     User.findOne({ username: uname })
         .exec(function (err, user) {
@@ -115,7 +115,7 @@ router.get('/answersBy/:username', function (req, res, next) {
     if (!res.locals || !res.locals.decoded)
         return res.status(403).send();
 
-    var uname = req.query.username || res.locals.decoded.username;
+    var uname = req.params.username || res.locals.decoded.username;
 
     User.findOne({ username: uname })
         .exec(function (err, user) {

@@ -74,7 +74,7 @@ router.get('/img/:username', function (req, res, next) {
     User.findOne({ username: req.params.username }).exec(function (err, user) {
         if (err)
             return next(err);
-        if (user.imgPath != undefined) {
+        if (user!=null && user.imgPath != undefined) {
             try {
                 var img = fs.readFileSync(__dirname + '/../assets/images/' + user.imgPath);
                 res.writeHead(200, { 'Content-type': 'image/' + path.extname(user.imgPath).slice(1) });
