@@ -84,7 +84,17 @@ Desc: Upvote a question
 In: qid  
 Out: Status 409 if already upvoted, 200 otherwise  
 
+##### /upvoteQuestionStatus/:qid (GET)
+Desc: Check if question upvoted by user  
+In: qid  
+Out: "True" if logged in user has upvoted, "False" if he hasn't. Status 409 if question doesn't exist  
+
 ##### /upvoteAnswer/:qid/:aid (GET)
 Desc: Upvote an answer  
 In: qid, aid  
 Out: Status 409 if already upvoted or aid not in question, 200 otherwise  
+
+##### /upvoteAnswerStatus/:qid/:aid (GET)
+Desc: Check if answer upvoted by user  
+In: qid, aid  
+Out: "True" if logged in user has upvoted, "False" if he hasn't. Status 409 if question/answer doesn't exist  

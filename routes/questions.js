@@ -140,6 +140,9 @@ router.get('/upvoteQuestion/:qid', function (req, res, next) {
         .exec(function (err, question) {
             if (err) return next(err);
 
+            if(!question)
+                return res.status(409).send();
+
             if (!question.upvotedBy)
                 question.upvotedBy = [res.locals.decoded._id];
             else if (question.upvotedBy.indexOf(res.locals.decoded._id) == -1)
@@ -155,6 +158,52 @@ router.get('/upvoteQuestion/:qid', function (req, res, next) {
         });
 });
 
+router.get('/upvoteQuestionStatus/:qid', function (req, res, next) {
+    if (!res.locals || !res.locals.decoded)
+        return res.status(403).send();
+
+    Question.findOne({ _id: req.params.qid })
+        .exec(function (err, question) {
+            if (err) return next(err);
+
+            if(!question)
+                return res.status(409).send();
+
+            if (!question.upvotedBy || question.upvotedBy.indexOf(res.locals.decoded._id) == -1)
+                return res.send("False"); // user has not upvoted
+            else
+                return res.send("True");
+        });
+});
+
+router.get('/upvoteAnswerStatus/:qid/:aid', function (req, res, next) {
+    if (!res.locals || !res.locals.decoded)
+        return res.status(403).send();
+
+    Question.findOne({ _id: req.params.qid })
+        .exec(function (err, question) {
+            if (err) return next(err);
+
+            if(!question)
+                return res.status(409).send();
+
+            var match = false;
+            for (var i = 0; i < question.answers.length; ++i) {
+                if (question.answers[i]._id == req.params.aid) {
+                    match = true;
+
+                    if (!question.answers[i].upvotedBy || question.answers[i].upvotedBy.indexOf(res.locals.decoded._id) == -1)
+                        return res.send("False");
+                    else
+                        return res.send("True");
+                }
+            }
+
+            if (match == false)
+                return res.status(409).send();
+        });
+});
+
 router.get('/upvoteAnswer/:qid/:aid', function (req, res, next) {
     if (!res.locals || !res.locals.decoded)
         return res.status(403).send();
@@ -162,6 +211,9 @@ router.get('/upvoteAnswer/:qid/:aid', function (req, res, next) {
     Question.findOne({ _id: req.params.qid })
         .exec(function (err, question) {
             if (err) return next(err);
+
+            if(!question)
+                return res.status(409).send();
 
             var match = false;
             for (var i = 0; i < question.answers.length; ++i) {
