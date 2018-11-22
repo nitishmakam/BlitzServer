@@ -80,11 +80,13 @@ router.post('/createAnswer', function (req, res, next) {
                 { json: { text: req.body.text, } },
                 function (error, response, body) {
 
-                    if(error || response.statusCode != 200 || body.nospam < body.spam)
-                        if(!error || error.code !== 'ETIMEDOUT')
+                    if (error || response.statusCode != 200) {
+                        if (!error || error.code !== 'ETIMEDOUT')
                             return res.status(409).send();
                         console.log("Could not reach spam checker!");
-                    
+                    } else if (body.nospam < body.spam) {
+                        return res.status(409).json({ text: 'spam' });
+                    }
                     console.log(body);
 
                     question.save(function (err) {
@@ -147,7 +149,7 @@ router.get('/upvoteQuestion/:qid', function (req, res, next) {
         .exec(function (err, question) {
             if (err) return next(err);
 
-            if(!question)
+            if (!question)
                 return res.status(409).send();
 
             if (!question.upvotedBy)
@@ -175,7 +177,7 @@ router.get('/upvoteQuestionStatus/:qid', function (req, res, next) {
         .exec(function (err, question) {
             if (err) return next(err);
 
-            if(!question)
+            if (!question)
                 return res.status(409).send();
 
             if (!question.upvotedBy || question.upvotedBy.indexOf(res.locals.decoded._id) == -1)
@@ -189,15 +191,11 @@ router.get('/upvoteAnswerStatus/:qid/:aid', function (req, res, next) {
     if (!res.locals || !res.locals.decoded)
         return res.status(403).send();
 
-    req.headers['Cache-control'] = 'nocache, nostore, must-revalidate';
-    req.headers['Expires'] = '-1';
-    req.headers['Pragma'] = 'no-cache';
-
     Question.findOne({ _id: req.params.qid })
         .exec(function (err, question) {
             if (err) return next(err);
 
-            if(!question)
+            if (!question)
                 return res.status(409).send();
 
             var match = false;
@@ -225,7 +223,7 @@ router.get('/upvoteAnswer/:qid/:aid', function (req, res, next) {
         .exec(function (err, question) {
             if (err) return next(err);
 
-            if(!question)
+            if (!question)
                 return res.status(409).send();
 
             var match = false;
