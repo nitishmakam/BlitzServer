@@ -1,3 +1,4 @@
+var request = require('request');
 var express = require('express');
 var router = express.Router();
 
@@ -75,19 +76,23 @@ router.post('/createAnswer', function (req, res, next) {
             else
                 question.answers.push(answer);
 
-            question.save(function (err) {
-                if (err) return next(err);
+            request.post('https://oopspam.herokuapp.com',
+                { json: { text: req.body.text, } },
+                function (error, response, body) {
 
-                // Question.findOne({ _id: question._id }, { __v: 0, })
-                //     .populate({ path: 'user', select: 'username -_id' })
-                //     .populate({ path: 'answers.user', select: 'username -_id' })
-                //     .exec(function (err, question) {
-                //         if (err) return next(err);
+                    if(error || response.statusCode != 200 || body.nospam < body.spam)
+                        if(!error || error.code !== 'ETIMEDOUT')
+                            return res.status(409).send();
+                        console.log("Could not reach spam checker!");
+                    
+                    console.log(body);
 
-                //         return res.status(200).json(question);
-                //     });
-                return res.status(200).json(question.answers[question.answers.length - 1]);
-            });
+                    question.save(function (err) {
+                        if (err) return next(err);
+
+                        return res.status(200).json(question.answers[question.answers.length - 1]);
+                    });
+                });
 
         });
 });
@@ -164,6 +169,8 @@ router.get('/upvoteQuestionStatus/:qid', function (req, res, next) {
     if (!res.locals || !res.locals.decoded)
         return res.status(403).send();
 
+    req.headers['if-none-match'] = '';
+
     Question.findOne({ _id: req.params.qid })
         .exec(function (err, question) {
             if (err) return next(err);
@@ -181,6 +188,10 @@ router.get('/upvoteQuestionStatus/:qid', function (req, res, next) {
 router.get('/upvoteAnswerStatus/:qid/:aid', function (req, res, next) {
     if (!res.locals || !res.locals.decoded)
         return res.status(403).send();
+
+    req.headers['Cache-control'] = 'nocache, nostore, must-revalidate';
+    req.headers['Expires'] = '-1';
+    req.headers['Pragma'] = 'no-cache';
 
     Question.findOne({ _id: req.params.qid })
         .exec(function (err, question) {
