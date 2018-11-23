@@ -1,3 +1,7 @@
+# BLITZ
+This repository contains the code for the Question & Answer forum titled Blitz. It was built using NodeJS.
+
+
 ### First time:  
     npm install
 
